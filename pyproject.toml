@@ -56,5 +56,5 @@ version_provider = "poetry"
 version_scheme = "semver"
 version_files = [
     "home-assistant/custom_components/lunaticoastro-dragonfly-controller/manifest.json:version",
-    "home-assistant/custom_components/lunaticoastro-dragonfly-controller/manifest.json:requirements"
+    "home-assistant\custom_components\lunaticoastro-dragonfly-controller\manifest.json:requirements"
 ]
