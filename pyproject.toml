@@ -36,7 +36,7 @@ pytest-bdd = "*"
 allure-pytest-bdd = "*"
 pytest-xdist = {extras = ["psutil"], version = "*"}
 pyhamcrest = "*"
-
+lunaticoastro-dragonfly-controller = "*"
 
 [tool.poetry.scripts]
 lunaticoastro-dragonfly-controller = "lunaticoastro-dragonfly-controller.lunaticoastro-dragonfly-controller:collect_data"
@@ -49,6 +49,7 @@ to = {format = "poetry", path = "pyproject.toml"}
 
 [tool.poetry.dependencies]
 python = ">=3.10"
+lunaticoastro-dragonfly-controller = "*"
 
 [tool.commitizen]
 major_version_zero = true

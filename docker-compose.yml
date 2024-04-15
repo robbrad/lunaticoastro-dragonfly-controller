@@ -6,5 +6,5 @@ services:
     ports:
       - "8080:8080"  # Adjust the ports as needed
     environment:
-      - DRAGONFLY_IP=192.168.x.x
+      - DRAGONFLY_IP=192.168.10.11
       - DRAGONFLY_PORT=10000
