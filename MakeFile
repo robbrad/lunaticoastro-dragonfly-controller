@@ -1,5 +1,0 @@
-.PHONY: install pre-build build black pycodestyle update-wiki
-
-install:
-	poetry install
-
