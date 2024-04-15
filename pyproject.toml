@@ -56,6 +56,5 @@ version_provider = "poetry"
 version_scheme = "semver"
 version_files = [
     "custom_components/lunaticoastro-dragonfly-controller/manifest.json:version",
-    "custom_components/lunaticoastro-dragonfly-controller/manifest.json:requirements",
-    "custom_components/lunaticoastro-dragonfly-controller/config_flow.py:githubusercontent"
+    "custom_components/lunaticoastro-dragonfly-controller/manifest.json:requirements"
 ]
