@@ -1,0 +1,61 @@
+[tool.poetry]
+name = "lunaticoastro-dragonfly-controller"
+version = "0.0.1"
+description = "Python Lib to control lunaticoastro dragonfly"
+readme = "README.md"
+authors = ["Robert Bradley <robbrad182@gmail.com>"]
+packages = [
+    { include = "dragonfly_dome", from = "." },
+]
+include = ["dragonfly_dome"]
+
+[tool.pytest.ini_options]
+pythonpath = [
+    ".", "dragonfly_dome"
+]
+
+[tool.flit.metadata]
+module = "dragonfly_dome"
+
+[tool.poetry.urls]
+issues = "https://github.com/robbrad/lunaticoastro-dragonfly-controller/issues"
+
+[build-system]
+requires = ["poetry-core>=1.2.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.dev-dependencies]
+black = "*"
+coverage = "*"
+flake8 = "*"
+jsonschema = "*"
+pylint = "*"
+pytest = "*"
+setuptools = "*"
+pytest-bdd = "*"
+allure-pytest-bdd = "*"
+pytest-xdist = {extras = ["psutil"], version = "*"}
+pyhamcrest = "*"
+
+
+[tool.poetry.scripts]
+lunaticoastro-dragonfly-controller = "lunaticoastro-dragonfly-controller.lunaticoastro-dragonfly-controller:collect_data"
+
+[tool.dephell.main]
+versioning = "semver"
+from = {format = "poetrylock", path = "poetry.lock"}
+envs = ["main"]
+to = {format = "poetry", path = "pyproject.toml"}
+
+[tool.poetry.dependencies]
+python = ">=3.10"
+
+[tool.commitizen]
+major_version_zero = true
+version_provider = "poetry"
+version_scheme = "semver"
+version_files = [
+    "custom_components/lunaticoastro-dragonfly-controller/manifest.json:version",
+    "custom_components/lunaticoastro-dragonfly-controller/manifest.json:requirements",
+    "custom_components/lunaticoastro-dragonfly-controller/config_flow.py:githubusercontent"
+]
