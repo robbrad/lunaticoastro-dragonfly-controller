@@ -1,0 +1,169 @@
+swagger: "2.0"
+info:
+  description: "API for managing the DragonFly Dome Controller device."
+  version: "1.0.0"
+  title: "DragonFly Dome Controller API"
+basePath: "/api"
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+definitions:
+  RelayStatus:
+    type: object
+    properties:
+      status:
+        type: string
+        description: "Current status of the relay (open or closed)."
+  SensorStatus:
+    type: object
+    properties:
+      status:
+        type: string
+        description: "Current status of the sensor (value or 'unknown')."
+        
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        description: "The HTTP status code (range: 400-599)"
+        minimum: 400
+        maximum: 599
+      message:
+        type: string
+        description: "Description of the error"
+paths:
+  /relay/{relay_id}/status:
+    get:
+      operationId: "server.get_relay_data"
+      tags:
+        - "Relay"
+      summary: "Get relay status"
+      description: "Retrieves the current status of a specified relay."
+      parameters:
+        - name: "relay_id"
+          in: "path"
+          required: true
+          type: "integer"
+          description: "ID of the relay to check status."
+      responses:
+        200:
+          description: "Successfully retrieved the relay status."
+          schema:
+            $ref: "#/definitions/RelayStatus"
+        404:
+          description: "Relay not found."
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Failed to retrieve the status."
+          schema:
+            $ref: "#/definitions/Error"
+
+  /sensor/{sensor_id}/status:
+    get:
+      operationId: "server.get_sensor_data"
+      tags:
+        - "Sensor"
+      summary: "Get sensor status"
+      description: "Retrieves the current status of a specified sensor."
+      parameters:
+        - name: "sensor_id"
+          in: "path"
+          required: true
+          type: "integer"
+          enum: [0, 1, 2, 3, 4, 5, 6, 7]
+          description: "ID of the sensor to check status."
+      responses:
+        200:
+          description: "Successfully retrieved the sensor status."
+          schema:
+            $ref: "#/definitions/SensorStatus"
+        404:
+          description: "Sensor not found."
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Failed to retrieve the status."
+          schema:
+            $ref: "#/definitions/Error"
+
+  /sensor/get_all_data:
+    get:
+      operationId: "server.get_all_sensor_data"
+      tags:
+        - "Sensor"
+      summary: "Get all sensor statuses"
+      description: "Retrieves statuses of all the sensors."
+      responses:
+        200:
+          description: "Successfully retrieved all sensor statuses."
+          schema:
+            $ref: "#/definitions/SensorStatus"
+        404:
+          description: "Sensor not found."
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Failed to retrieve the status."
+          schema:
+            $ref: "#/definitions/Error"
+
+  /relay/get_all_data:
+    get:
+      operationId: "server.get_all_relay_data"
+      tags:
+        - "Relay"
+      summary: "Get all relay statuses"
+      description: "Retrieves statuses of all the relay."
+      responses:
+        200:
+          description: "Successfully retrieved all relay statuses."
+          schema:
+            $ref: "#/definitions/RelayStatus"
+        404:
+          description: "Sensor not found."
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Failed to retrieve the status."
+          schema:
+            $ref: "#/definitions/Error"
+
+  /relay/{relay_id}/{state}]:
+    get:
+      operationId: "server.set_relay_state"
+      tags:
+        - "Relay"
+      summary: "Sets the relay status"
+      description: "Sets a new state for a specified relay."
+      parameters:
+        - name: "relay_id"
+          in: "path"
+          required: true
+          type: "integer"
+          description: "ID of the sensor to check status."
+          enum: [0, 1, 2, 3, 4, 5, 6, 7]
+        - name: "state"
+          in: "path"
+          required: true
+          type: "string"
+          description: >
+            Relay State:
+             * `open` - Open the relay
+             * `closed` - Close the relay
+          enum: [open, closed]
+      responses:
+        200:
+          description: "Successfully set the relay state."
+          schema:
+            $ref: "#/definitions/RelayStatus"
+        404:
+          description: "Sensor not found."
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Failed to retrieve the status."
+          schema:
+            $ref: "#/definitions/Error"
