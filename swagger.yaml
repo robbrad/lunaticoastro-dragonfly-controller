@@ -34,6 +34,27 @@ definitions:
         type: string
         description: "Description of the error"
 paths:
+  /get_all_data:
+    get:
+      operationId: "server.get_all_data"
+      tags:
+        - "dome"
+      summary: "Get all statuses"
+      description: "Retrieves statuses of all the sensors and relays."
+      responses:
+        200:
+          description: "Successfully retrieved all sensor statuses."
+          schema:
+            $ref: "#/definitions/SensorStatus"
+        404:
+          description: "Sensor not found."
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Failed to retrieve the status."
+          schema:
+            $ref: "#/definitions/Error"
+
   /relay/{relay_id}/status:
     get:
       operationId: "server.get_relay_data"
