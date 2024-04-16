@@ -6,10 +6,22 @@ on:
       - '*'
 jobs:
 
+    - name: Install dependencies
+      run: 
+
   build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+
+    - name: Run image
+      uses: abatilo/actions-poetry@v3.0.0
+      with:
+        poetry-version: '1.5.1'
+
+    - name: Install
+      run: poetry export --without-hashes --format=requirements.txt > requirements.txt
+
     - name: Publish to Registry
       uses: elgohr/Publish-Docker-Github-Action@v5
       with:

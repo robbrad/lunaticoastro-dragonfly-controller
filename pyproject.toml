@@ -7,22 +7,11 @@ authors = ["Robert Bradley <robbrad182@gmail.com>"]
 packages = [
     { include = "dragonfly_dome", from = "." },
 ]
-include = ["dragonfly_dome"]
 
-[tool.pytest.ini_options]
-pythonpath = [
-    ".", "dragonfly_dome"
-]
-
-[tool.flit.metadata]
-module = "dragonfly_dome"
-
-[tool.poetry.urls]
-issues = "https://github.com/robbrad/lunaticoastro-dragonfly-controller/issues"
-
-[build-system]
-requires = ["poetry-core>=1.2.0"]
-build-backend = "poetry.core.masonry.api"
+[tool.poetry.dependencies]
+python = ">=3.10,<4.0"
+connexion = {extras = ["swagger-ui"], version = "^3.0.6"}
+uvicorn = "^0.29.0"
 
 [tool.poetry.dev-dependencies]
 black = "*"
@@ -36,20 +25,19 @@ pytest-bdd = "*"
 allure-pytest-bdd = "*"
 pytest-xdist = {extras = ["psutil"], version = "*"}
 pyhamcrest = "*"
-lunaticoastro-dragonfly-controller = "*"
 
 [tool.poetry.scripts]
-lunaticoastro-dragonfly-controller = "lunaticoastro-dragonfly-controller.lunaticoastro-dragonfly-controller:collect_data"
+lunaticoastro_dragonfly_controller = "dragonfly_dome:controller"
 
-[tool.dephell.main]
-versioning = "semver"
-from = {format = "poetrylock", path = "poetry.lock"}
-envs = ["main"]
-to = {format = "poetry", path = "pyproject.toml"}
+[tool.pytest.ini_options]
+pythonpath = ["."]  # This may still be unnecessary depending on your structure
 
-[tool.poetry.dependencies]
-python = ">=3.10"
-lunaticoastro-dragonfly-controller = "*"
+[tool.poetry.urls]
+issues = "https://github.com/robbrad/lunaticoastro-dragonfly-controller/issues"
+
+[build-system]
+requires = ["poetry-core>=1.2.0"]
+build-backend = "poetry.core.masonry.api"
 
 [tool.commitizen]
 major_version_zero = true
