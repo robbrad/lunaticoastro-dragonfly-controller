@@ -4,28 +4,38 @@ on:
   push:
     tags:
       - '*'
+
 jobs:
-
-    - name: Install dependencies
-      run: 
-
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Run image
-      uses: abatilo/actions-poetry@v3.0.0
-      with:
-        poetry-version: '1.5.1'
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'  # Specify the Python version you need
 
-    - name: Install
-      run: poetry export --without-hashes --format=requirements.txt > requirements.txt
+      - name: Install Poetry
+        uses: abatilo/actions-poetry@v3.0.0
+        with:
+          poetry-version: '1.5.1'
 
-    - name: Publish to Registry
-      uses: elgohr/Publish-Docker-Github-Action@v5
-      with:
-        name: robbrad182/dragonfly-dome-controller
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_API_KEY }}
-        workdir: .
+      - name: Install dependencies
+        run: poetry install
+
+      - name: Export dependencies to requirements.txt
+        run: poetry export --without-hashes --format=requirements.txt > requirements.txt
+
+      - name: Build Docker image
+        run: docker build -t robbrad182/dragonfly-dome-controller .
+
+      - name: Publish to Registry
+        uses: elgohr/Publish-Docker-Github-Action@v5
+        with:
+          name: robbrad182/dragonfly-dome-controller
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_API_KEY }}
+          registry: docker.io
+          snapshot: true
