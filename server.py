@@ -44,7 +44,7 @@ def get_all_relay_data():
         return None
 
 
-def get_all_sensor_data():
+def get_all_data():
     try:
         with DragonFlyDomeController(DRAGONFLY_IP, DRAGONFLY_PORT) as controller:
             sensors = []
@@ -55,7 +55,8 @@ def get_all_sensor_data():
                 sensor_info = controller.parse_sensor_info(sensor_status)
                 sensors.append(sensor_info)
                 relay_status = controller.get_relay_data(i)
-                relays = controller.parse_relay_info(relay_status)
+                relay_info = controller.parse_relay_info(relay_status)
+                relays.append(relay_info)
             # Now, create a dictionary that wraps the list of sensor data
             data_dict = {"sensors": sensors, "relays": relays}
             # If you need to return a JSON string instead of a dictionary
@@ -64,7 +65,7 @@ def get_all_sensor_data():
         print(f"An error occurred: {str(e)}")
         return {}  # Return an empty dictionary in case of an error
 
-def get_all_data():
+def get_all_sensor_data():
     try:
         with DragonFlyDomeController(DRAGONFLY_IP, DRAGONFLY_PORT) as controller:
             sensors = []
