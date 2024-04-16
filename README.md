@@ -1,4 +1,4 @@
-# lunaticoastro-dragonfly-controller
+# Lunaticoastro Dragonfly Controller
 Python code serves as a client that controls and queries a dome (DragonFly Dome) controller over a network, allowing it to send commands, and fetch relay and sensor data remotely.
 
 Once the Container is running you can open the API at http://<container_ip>:8080/api/ui/
