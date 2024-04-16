@@ -9,7 +9,7 @@
     "integration_type": "service",
     "iot_class": "cloud_polling",
     "issue_tracker": "https://github.com/robbrad/lunaticoastro-dragonfly-controller/issues",
-    "requirements": ["uk-bin-collection>=0.7.0"],
-    "version": "0.7.0",
+    "requirements": ["uk-bin-collection>=0.7.1"],
+    "version": "0.7.1",
     "zeroconf": []
 }

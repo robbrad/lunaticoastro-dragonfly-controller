@@ -1,3 +1,9 @@
+## 0.7.1 (2024-04-16)
+
+### Fix
+
+- decouple docker image and pip module - use sourcecode
+
 ## 0.7.0 (2024-04-16)
 
 ### Feat
