@@ -46,3 +46,15 @@ jobs:
         run: |
           poetry config pypi-token.pypi "${{ secrets.PYPI_API_KEY }}"
           poetry publish --build
+
+      - name: Build Docker image
+        run: docker build -t robbrad182/dragonfly-dome-controller .
+
+      - name: Publish to Registry
+        uses: elgohr/Publish-Docker-Github-Action@v5
+        with:
+          name: robbrad182/dragonfly-dome-controller
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_API_KEY }}
+          registry: docker.io
+          snapshot: true
