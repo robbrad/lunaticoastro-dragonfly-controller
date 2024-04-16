@@ -15,18 +15,12 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9'  # Specify the Python version you need
+          python-version: '3.11'  # Specify the Python version you need
 
       - name: Install Poetry
         uses: abatilo/actions-poetry@v3.0.0
         with:
           poetry-version: '1.5.1'
-
-      - name: Install dependencies
-        run: poetry install
-
-      - name: Export dependencies to requirements.txt
-        run: poetry export --without-hashes --format=requirements.txt > requirements.txt
 
       - name: Build Docker image
         run: docker build -t robbrad182/dragonfly-dome-controller .
