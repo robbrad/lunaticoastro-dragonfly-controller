@@ -1,3 +1,10 @@
+## 0.9.0 (2024-04-16)
+
+### Fix
+
+- custom compo module correction
+- custom compo module correction
+
 ## 0.7.1 (2024-04-16)
 
 ### Fix
