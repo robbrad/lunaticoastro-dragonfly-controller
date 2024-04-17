@@ -153,7 +153,7 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  /relay/{relay_id}/{state}]:
+  /relay/{relay_id}/{state}:
     get:
       operationId: "server.set_relay_state"
       tags:
