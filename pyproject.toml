@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "lunaticoastro-dragonfly-controller"
-version = "0.11.0"
+version = "0.12.0"
 description = "Python Lib to control lunaticoastro dragonfly"
 readme = "README.md"
 authors = ["Robert Bradley <robbrad182@gmail.com>"]
