@@ -11,7 +11,7 @@ This Docker container provides an isolated environment for running a server that
 These instructions will cover usage information and for the docker container.  
 
 ## DockerHub
-The image is available on the Docker Hub at [robbrad182/dragonfly-dome-controller:latest](robbrad182/dragonfly-dome-controller:latest)
+The image is available on the Docker Hub at [robbrad182/dragonfly-dome-controller:latest](https://hub.docker.com/r/robbrad182/dragonfly-dome-controller)
 
 ### Prerequisites  
 
