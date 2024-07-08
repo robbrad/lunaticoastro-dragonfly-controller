@@ -1,101 +1,84 @@
 from dragonfly_dome.controller import DragonFlyDomeController
 import connexion
-from flask import jsonify
+from flask import jsonify, Flask, Response
 import os
+import logging
 
+# Setup logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# Environment Variables
 DRAGONFLY_IP = os.getenv('DRAGONFLY_IP')
-DRAGONFLY_PORT = int(os.getenv('DRAGONFLY_PORT'))
+DRAGONFLY_PORT = int(os.getenv('DRAGONFLY_PORT', '8080'))
 
 
-def get_sensor_data(sensor_id):
+def handle_controller_error(e: Exception) -> Response:
+    logger.error(f"An error occurred: {str(e)}")
+    return jsonify({"error": str(e)}), 500
+
+
+def get_sensor_data(sensor_id: int) -> Response:
     try:
         with DragonFlyDomeController(DRAGONFLY_IP, DRAGONFLY_PORT) as controller:
             status = controller.get_sensor_data(sensor_id)
-            return jsonify({"sensor": [controller.parse_sensor_info(status)]})
+            sensor_info = controller.parse_sensor_info(status)
+            return jsonify({"sensor": sensor_info})
     except Exception as e:
-        print(f"An error occurred: {str(e)}")
+        return handle_controller_error(e)
 
 
-def get_relay_data(relay_id):
+def get_relay_data(relay_id: int) -> Response:
     try:
         with DragonFlyDomeController(DRAGONFLY_IP, DRAGONFLY_PORT) as controller:
             status = controller.get_relay_data(relay_id)
-            return jsonify({"relay": [controller.parse_relay_info(status)]})
+            relay_info = controller.parse_relay_info(status)
+            return jsonify({"relay": relay_info})
     except Exception as e:
-        print(f"An error occurred: {str(e)}")
+        return handle_controller_error(e)
 
 
-def get_all_relay_data():
+def get_all_sensor_data() -> Response:
     try:
         with DragonFlyDomeController(DRAGONFLY_IP, DRAGONFLY_PORT) as controller:
-            relays = []
-            for i in range(8):
-                status = controller.get_relay_data(i)
-                relay_info = controller.parse_relay_info(status)
-                # Directly append the dictionary, assuming parse_relay_info returns a dict
-                relays.append(relay_info)
-            # No need to load JSON here, just prepare the final dictionary
-            relays_json = {"relays": relays}
-            # Return a JSON string
-            return jsonify(relays_json)
+            sensors = [controller.parse_sensor_info(controller.get_sensor_data(i)) for i in range(8)]
+            return jsonify({"sensors": sensors})
     except Exception as e:
-        print(f"An error occurred: {str(e)}")
-        # It's good practice to return None or raise the exception again after logging it
-        return None
+        return handle_controller_error(e)
 
 
-def get_all_data():
+def get_all_relay_data() -> Response:
     try:
         with DragonFlyDomeController(DRAGONFLY_IP, DRAGONFLY_PORT) as controller:
-            sensors = []
-            relays = []
-            for i in range(8):
-                sensor_status = controller.get_sensor_data(i)
-                # Assuming parse_sensor_info returns a JSON string
-                sensor_info = controller.parse_sensor_info(sensor_status)
-                sensors.append(sensor_info)
-                relay_status = controller.get_relay_data(i)
-                relay_info = controller.parse_relay_info(relay_status)
-                relays.append(relay_info)
-            # Now, create a dictionary that wraps the list of sensor data
-            data_dict = {"sensors": sensors, "relays": relays}
-            # If you need to return a JSON string instead of a dictionary
-            return jsonify(data_dict)
+            relays = [controller.parse_relay_info(controller.get_relay_data(i)) for i in range(8)]
+            return jsonify({"relays": relays})
     except Exception as e:
-        print(f"An error occurred: {str(e)}")
-        return {}  # Return an empty dictionary in case of an error
+        return handle_controller_error(e)
 
-def get_all_sensor_data():
+
+def get_all_data() -> Response:
     try:
         with DragonFlyDomeController(DRAGONFLY_IP, DRAGONFLY_PORT) as controller:
-            sensors = []
-            for i in range(8):
-                status = controller.get_sensor_data(i)
-                # Assuming parse_sensor_info returns a JSON string
-                sensor_info = controller.parse_sensor_info(status)
-                sensors.append(sensor_info)
-            # Now, create a dictionary that wraps the list of sensor data
-            sensors_dict = {"sensors": sensors}
-            # If you need to return a JSON string instead of a dictionary
-            return jsonify(sensors_dict)
+            sensors = [controller.parse_sensor_info(controller.get_sensor_data(i)) for i in range(8)]
+            relays = [controller.parse_relay_info(controller.get_relay_data(i)) for i in range(8)]
+            return jsonify({"sensors": sensors, "relays": relays})
     except Exception as e:
-        print(f"An error occurred: {str(e)}")
-        return {}  # Return an empty dictionary in case of an error
+        return handle_controller_error(e)
 
 
-def set_relay_state(relay_id, state):
+def set_relay_state(relay_id: int, state: bool) -> Response:
     try:
         with DragonFlyDomeController(DRAGONFLY_IP, DRAGONFLY_PORT) as controller:
             status = controller.set_relay_state(relay_id, state)
-            return status
+            return jsonify({"status": status})
     except Exception as e:
-        print(f"An error occurred: {str(e)}")
+        return handle_controller_error(e)
 
 
-def create_app():
+def create_app() -> Flask:
     app = connexion.App(__name__, specification_dir="./")
     app.add_api("swagger.yaml")
-    return app
+    return app.app
 
 
 if __name__ == "__main__":
