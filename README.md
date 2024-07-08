@@ -33,7 +33,7 @@ Build the Docker image using the following command:
 docker build -t dragonfly-dome-controller .
 ```
 
-This command builds the Docker image with the tag `dragonfly-dome-controller`, using the Dockerfile in the current directory.
+This command builds the Docker image with the tag `dragonfly-dome-controller`, using the Dockerfile from the current directory.
 
 ### Environment Variables
 
