@@ -9,3 +9,11 @@ updates:
     commit-message:
       # Prefix all commit messages with "chore: "
       prefix: "chore"
+
+  - package-ecosystem: "pip"
+    directory: "dragonfly_dome"
+    schedule:
+      interval: daily
+      time: "06:00"
+    commit-message:
+      prefix: "chore"
