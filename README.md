@@ -1,7 +1,7 @@
 # Lunaticoastro Dragonfly Controller
 Python code serves as a client that controls and queries a dome (DragonFly Dome) controller over a network, allowing it to send commands, and fetch relay and sensor data remotely.
 
-Once the container is running you can open the API at http://<container_ip>:8080/api/ui/
+Once the container is running you can open the API at http://<container_ip>:8080/docs/
 
 # DragonFly Dome Controller  
 This Docker container provides an isolated environment for running a server that interfaces with the DragonFly Dome controller, allowing remote command sending and data retrieval.  

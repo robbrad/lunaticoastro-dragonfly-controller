@@ -1,4 +1,2 @@
-connexion
 uvicorn
-connexion[flask]
-connexion[swagger-ui]
+fastapi

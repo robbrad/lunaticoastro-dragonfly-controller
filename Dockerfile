@@ -19,4 +19,4 @@ COPY . .
 EXPOSE 8080
 
 # Command to run your application using Uvicorn
-CMD ["uvicorn", "server:create_app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["uvicorn", "server:app", "--host", "0.0.0.0", "--port", "8080"]

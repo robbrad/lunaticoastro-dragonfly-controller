@@ -10,8 +10,8 @@ packages = [
 
 [tool.poetry.dependencies]
 python = ">=3.10,<4.0"
-connexion = {extras = ["swagger-ui"], version = "^3.0.6"}
 uvicorn = "^0.29.0"
+fastapi = "^0.111.0"
 
 [tool.poetry.dev-dependencies]
 black = "*"

@@ -1,86 +1,84 @@
+from fastapi import FastAPI, HTTPException
 from dragonfly_dome.controller import DragonFlyDomeController
-import connexion
-from flask import jsonify, Flask, Response
 import os
 import logging
+from enum import Enum
+
+app = FastAPI()
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Environment Variables
-DRAGONFLY_IP = os.getenv('DRAGONFLY_IP')
-DRAGONFLY_PORT = int(os.getenv('DRAGONFLY_PORT', '8080'))
+DRAGONFLY_IP = os.getenv('DRAGONFLY_IP', '127.0.0.1')
+DRAGONFLY_PORT = int(os.getenv('DRAGONFLY_PORT', '10000'))
 
+class Status(str, Enum):
+    OPEN = 'open'
+    CLOSED = 'closed'
 
-def handle_controller_error(e: Exception) -> Response:
+def handle_controller_error(e: Exception):
     logger.error(f"An error occurred: {str(e)}")
-    return jsonify({"error": str(e)}), 500
+    raise HTTPException(status_code=500, detail=str(e))
 
-
-def get_sensor_data(sensor_id: int) -> Response:
+@app.get("/sensor/{sensor_id}")
+def get_sensor_data(sensor_id: int):
     try:
         with DragonFlyDomeController(DRAGONFLY_IP, DRAGONFLY_PORT) as controller:
             status = controller.get_sensor_data(sensor_id)
             sensor_info = controller.parse_sensor_info(status)
-            return jsonify({"sensor": sensor_info})
+            return {"sensor": sensor_info}
     except Exception as e:
         return handle_controller_error(e)
 
-
-def get_relay_data(relay_id: int) -> Response:
+@app.get("/relay/{relay_id}")
+def get_relay_data(relay_id: int):
     try:
         with DragonFlyDomeController(DRAGONFLY_IP, DRAGONFLY_PORT) as controller:
             status = controller.get_relay_data(relay_id)
             relay_info = controller.parse_relay_info(status)
-            return jsonify({"relay": relay_info})
+            return {"relay": relay_info}
     except Exception as e:
         return handle_controller_error(e)
 
-
-def get_all_sensor_data() -> Response:
+@app.get("/sensors")
+def get_all_sensor_data():
     try:
         with DragonFlyDomeController(DRAGONFLY_IP, DRAGONFLY_PORT) as controller:
             sensors = [controller.parse_sensor_info(controller.get_sensor_data(i)) for i in range(8)]
-            return jsonify({"sensors": sensors})
+            return {"sensors": sensors}
     except Exception as e:
         return handle_controller_error(e)
 
-
-def get_all_relay_data() -> Response:
+@app.get("/relays")
+def get_all_relay_data():
     try:
         with DragonFlyDomeController(DRAGONFLY_IP, DRAGONFLY_PORT) as controller:
             relays = [controller.parse_relay_info(controller.get_relay_data(i)) for i in range(8)]
-            return jsonify({"relays": relays})
+            return {"relays": relays}
     except Exception as e:
         return handle_controller_error(e)
 
-
-def get_all_data() -> Response:
+@app.get("/all")
+def get_all_data():
     try:
         with DragonFlyDomeController(DRAGONFLY_IP, DRAGONFLY_PORT) as controller:
             sensors = [controller.parse_sensor_info(controller.get_sensor_data(i)) for i in range(8)]
             relays = [controller.parse_relay_info(controller.get_relay_data(i)) for i in range(8)]
-            return jsonify({"sensors": sensors, "relays": relays})
+            return {"sensors": sensors, "relays": relays}
     except Exception as e:
         return handle_controller_error(e)
 
-
-def set_relay_state(relay_id: int, state: bool) -> Response:
+@app.put("/relay/{relay_id}")
+def set_relay_state(relay_id: int, state: Status):
     try:
         with DragonFlyDomeController(DRAGONFLY_IP, DRAGONFLY_PORT) as controller:
             status = controller.set_relay_state(relay_id, state)
-            return jsonify({"status": status})
+            return {"status": status}
     except Exception as e:
         return handle_controller_error(e)
 
-
-def create_app() -> Flask:
-    app = connexion.App(__name__, specification_dir="./")
-    app.add_api("swagger.yaml")
-    return app.app
-
-
 if __name__ == "__main__":
-    app = create_app()
-    app.run(host="0.0.0.0", port=8080)
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8080)
